@@ -1,0 +1,121 @@
+<!-- /* index.html ────────────────────────────────────────────
+ *  3D Room Mode Calculator, Resonance Export, and SPAT Visualizer
+ *  this version: corrects world coordinates, opacity dimmers, azimuth 
+ *       updaters  
+ *  © 2025 Louis Goldford — Licensed under the Creative Commons
+ *  Attribution-NoDerivatives 4.0 International Licence (CC BY-ND 4.0)
+ *  https://creativecommons.org/licenses/by-nd/4.0/
+ * 
+ * This page runs in a browser and allows the user to calculate and
+ * visaulize room modes, send and receive OSC messages, and visually
+ * render a SPAT scene sent from MaxMSP over a Node script. 
+ * 
+ * FILE DEPENDENCIES: 
+ * - index.html
+ * - style.v06.css
+ * - lg.scene.render.v04.js
+ * - lg.spat.io.v01.js
+ * - lg.spatOscBridge.v03.js
+ * - assets/
+ * - udp_ws_bridge.v01.maxpat (a MaxMSP patch controlling the scene.)
+ * - udp_ws_bridge.v03.js (NOTE: the patch must run this node script BEFORE
+ *                         loading this page in a browser. Simply refresh
+ *                         the page if this happens out of order.)
+ * 
+ *──────────────────────────────────────────────────────────────*/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Room Mode Visualiser | Louis Goldford</title>
+  <link rel="stylesheet" href="style.v06.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/osc/dist/osc-browser.min.js"></script>
+
+  <!-- Import‑map resolves the bare specifier “three” used by the ES‑modules -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+
+<script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+    import { CSS2DRenderer, CSS2DObject } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js';
+
+    window.THREE = THREE;
+    window.CSS2DRenderer = CSS2DRenderer;
+    window.CSS2DObject = CSS2DObject;
+
+    // ————————————————————— LOAD RENDER SCRIPT —————————————————————
+    import './lg.scene.render.v04.js'
+  </script>
+
+</head>
+<body>
+  <div id="container"></div>
+
+  <!-- ————————————————————— HAMBURGER MENU SYSTEM ————————————————————— -->
+  <div id="hamburgerContainer">
+    <button id="hamburgerBtn" title="Toggle menu">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+    </button>
+  </div>
+
+  <div id="horizontalMenu">
+    <button id="downloadBtn" class="download-btn" title="Export mode list (.txt)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+        <path d="M.5 14.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+      </svg>
+      MODES
+    </button>
+
+    <button id="downloadJsonBtn" class="download-btn" title="Send scene calculations to MaxMSP via HTTP">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+        <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
+      </svg>
+      SEND MAX
+    </button>
+
+    <button id="nodeSourcesBtn" class="download-btn" title="Toggle antinode source placement mode">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="none" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 6px;">
+        <rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="8" cy="8" r="1.5"/>
+        <circle cx="16" cy="8" r="1.5"/>
+        <circle cx="12" cy="12" r="1.5"/>
+        <circle cx="8" cy="16" r="1.5"/>
+        <circle cx="16" cy="16" r="1.5"/>
+      </svg>
+      NODE SOURCES
+    </button>
+
+    <button id="entityTableBtn" class="download-btn" title="Toggle SPAT objects position table display">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v2h14V2a1 1 0 0 0-1-1H2zM1 5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5H1z"/>
+        <path d="M2.5 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+      SPAT OBJECTS
+    </button>
+
+    <button id="controllerTableBtn" class="download-btn" title="Toggle mobile controller table display">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
+        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+      </svg>
+      CONTROLLERS
+    </button>
+  </div>
+
+  <!-- Hidden original download bar (kept for backwards compatibility) -->
+  <div id="downloadBar" style="display: none;"></div>
+
+</body>
+</html>

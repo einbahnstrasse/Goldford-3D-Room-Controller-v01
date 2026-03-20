@@ -1,0 +1,430 @@
+/*───────────────────────────────────────────────
+ *  style.v06.css
+ *     • consolidated all visual styles; JS no longer injects CSS
+ *──────────────────────────────────────────────*/
+
+/*──────────────────────────────────────────────────────────────
+  general styles
+──────────────────────────────────────────────────────────────*/
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+#label-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.label {
+  font-family: Arial, sans-serif;
+  white-space: nowrap;
+}
+
+canvas {
+  display: block;
+}
+
+#modeTable {
+  position:absolute;
+  top:8px;
+  left:10px;
+  width:260px;
+  max-height:90vh;
+  font:12px/1.25 monospace;
+  color:#ddd;
+  background:#111a;
+  padding:4px;
+  overflow:auto;
+  border-radius:4px;
+  z-index:5;
+}
+
+#modeListDetails {
+  cursor: pointer; 
+  user-select: none; 
+  margin-bottom: 4px;
+}
+
+/*──────────────────────────────────────────────────────────────
+  resonances table
+──────────────────────────────────────────────────────────────*/
+
+#modeTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#modeTable th {
+  position: sticky;
+  top: 0;
+  background: #222;
+}
+
+#modeTable td,
+#modeTable th {
+  padding: 2px 3px;
+}
+
+#modeTable tr:hover {
+  /* background: #edf87074; */
+  background: #C4E538;
+  color: #111a;
+}
+
+#modeTable tr.selected-mode {
+  background: #E55B38 !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+#modeTable tr.selected-mode:hover {
+  background: #FF6B48 !important;
+  color: #fff !important;
+}
+
+/*──────────────────────────────────────────────────────────────
+  DOWNLOAD BUTTON — Solid swipe from left
+──────────────────────────────────────────────────────────────*/
+
+/* Common button style shared by both */
+.download-btn {
+  position: absolute;
+  padding: 4px 12px;
+  font: 600 12px;
+  font-family: sans-serif;
+  color: #C4E538;
+  background: none;
+  border: 1px solid #C4E538;
+  cursor: pointer;
+  box-shadow: 0 0 4px #0008;
+  z-index: 5;
+  overflow: hidden;
+  transition: color 0.3s ease-in-out, transform 0.1s;
+}
+
+/* Positioning */
+#downloadBtn {
+  top: 8px;
+  left: 280px;
+}
+
+#downloadJsonBtn {
+  top: 40px;
+  left: 280px;
+}
+#nodeSourcesBtn {
+  top: 72px;
+  left: 280px;
+}
+/* Active state for NODE SOURCES button */
+#nodeSourcesBtn.active {
+  background: #C4E538;
+  color: #111;
+}
+
+#entityTableBtn {
+  top: 104px;
+  left: 280px;
+}
+/* Active state for ENTITY TABLE button */
+#entityTableBtn.active {
+  background: #C4E538;
+  color: #111;
+}
+
+#controllerTableBtn {
+  top: 136px;
+  left: 280px;
+}
+/* Active state for CONTROLLERS button */
+#controllerTableBtn.active {
+  background: #C4E538;
+  color: #111;
+}
+
+/* Green swipe animation */
+.download-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background: #C4E538;
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.download-btn:hover::before {
+  transform: translateX(0);
+}
+
+.download-btn:hover {
+  color: #111;
+}
+
+.download-btn:active {
+  transform: translateY(1px);
+}
+
+.download-btn svg {
+  fill: currentColor;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/*──────────────────────────────────────────────────────────────
+  Enhanced style for RESET button in dat.GUI with swipe animation
+──────────────────────────────────────────────────────────────*/
+
+/* for vertical spacing */
+.dg .cr.function {
+  padding-bottom: 5px; 
+}
+
+/* When dat.GUI is closed, hide the RESET button row completely */
+.dg.closed .reset-row {
+  display: none !important;
+}
+
+.dg .cr.function .property-name {
+  margin: 2px 0;
+}
+
+.dg .cr.function .property-name {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border: solid #C4E538;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;  
+  color: #C4E538;
+  background: none;
+  cursor: pointer;
+  z-index: 0;
+  transition: color 0.3s ease-in-out, transform 0.1s;
+}
+
+.dg .cr.function .property-name::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background: #C4E538;
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.dg .cr.function .property-name:hover::before {
+  transform: translateX(0);
+}
+
+.dg .cr.function .property-name:hover {
+  color: #111;
+}
+
+/* Ensure dat.GUI is on top of everything */
+.dg {
+  z-index: 10000 !important;
+}
+
+/*──────────────────────────────────────────────────────────────
+  Tick labels
+──────────────────────────────────────────────────────────────*/
+
+.label {
+  font-family: monospace;
+  font-size: 11px;
+  color: white;
+  text-shadow: 0 0 2px black;
+  white-space: nowrap;
+}
+
+/*──────────────────────────────────────────────────────────────
+  HAMBURGER MENU SYSTEM 
+──────────────────────────────────────────────────────────────*/
+
+/* Hide original download bar */
+#downloadBar {
+  display: none;
+}
+
+/* Hamburger menu container */
+#hamburgerContainer {
+  position: fixed;
+  top: 8px;
+  left: 350px; /* Position to right of room modes table */
+  z-index: 1000;
+}
+
+/* Hamburger button */
+#hamburgerBtn {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  transition: all 0.3s ease;
+}
+
+#hamburgerBtn:hover {
+  transform: scale(1.1);
+}
+
+/* Hamburger lines */
+.hamburger-line {
+  width: 20px;
+  height: 2px;
+  background: #C4E538;
+  margin: 2px 0;
+  transition: all 0.3s ease;
+}
+
+/* Animated hamburger states */
+#hamburgerBtn.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+#hamburgerBtn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+#hamburgerBtn.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Horizontal menu */
+#horizontalMenu {
+  position: fixed;
+  top: 8px;
+  left: 390px; /* Start to right of hamburger */
+  height: auto; /* Let height adjust to button content */
+  min-height: 38px; /* Ensure minimum height for buttons */
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  display: flex;
+  flex-direction: row; /* Explicitly set horizontal layout */
+  align-items: center;
+  justify-content: flex-start; /* Start buttons from left */
+  padding: 0; /* Remove padding */
+  overflow-x: auto;
+  overflow-y: visible; /* Allow buttons to be visible */
+  white-space: nowrap;
+  z-index: 999;
+  
+  /* Animation properties */
+  width: 0;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease;
+}
+
+/* Menu expanded state */
+#horizontalMenu.expanded {
+  width: calc(100vw - 650px); /* Expand to right, leaving space for GUI */
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scrollbar styling for horizontal menu */
+#horizontalMenu::-webkit-scrollbar {
+  height: 6px;
+}
+
+#horizontalMenu::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+#horizontalMenu::-webkit-scrollbar-thumb {
+  background: #C4E538;
+  border-radius: 3px;
+}
+
+#horizontalMenu::-webkit-scrollbar-thumb:hover {
+  background: #d4f548;
+}
+
+/* Menu buttons - completely override positioning for horizontal layout */
+#horizontalMenu .download-btn {
+  /* CRITICAL: Override all positioning from base .download-btn */
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  
+  /* Keep essential button styling */
+  display: inline-block;
+  padding: 4px 12px;
+  font: 600 12px;
+  font-family: sans-serif;
+  color: #C4E538;
+  background: none;
+  border: 1px solid #C4E538;
+  cursor: pointer;
+  box-shadow: 0 0 4px #0008;
+  z-index: 5;
+  overflow: hidden;
+  transition: color 0.3s ease-in-out, transform 0.1s;
+  
+  /* Horizontal layout */
+  margin: 0 15px 0 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Override specific button ID positioning when in horizontal menu */
+#horizontalMenu #downloadBtn,
+#horizontalMenu #downloadJsonBtn, 
+#horizontalMenu #nodeSourcesBtn,
+#horizontalMenu #entityTableBtn,
+#horizontalMenu #controllerTableBtn {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Active/toggle states for the 3 toggle buttons in horizontal menu */
+#horizontalMenu #nodeSourcesBtn.active,
+#horizontalMenu #entityTableBtn.active,
+#horizontalMenu #controllerTableBtn.active {
+  background: #C4E538;
+  color: #111;
+}
+
+/* Keep wipe effect visible when buttons are active */
+#horizontalMenu #nodeSourcesBtn.active::before,
+#horizontalMenu #entityTableBtn.active::before,
+#horizontalMenu #controllerTableBtn.active::before {
+  transform: translateX(0) !important;
+}
+
+/* Ensure the hover animation is constrained to individual buttons in horizontal menu */
+#horizontalMenu .download-btn::before {
+  /* Inherit all properties from .download-btn::before but ensure proper scoping */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background: #C4E538;
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: -1;
+}
+
+/* Hover states for buttons in horizontal menu */
+#horizontalMenu .download-btn:hover::before {
+  transform: translateX(0);
+}
+
+#horizontalMenu .download-btn:hover {
+  color: #111;
+}

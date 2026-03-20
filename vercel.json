@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd mobile-controller && npm run build",
+  "outputDirectory": "mobile-controller/.next",
+  "installCommand": "cd mobile-controller && npm install"
+}

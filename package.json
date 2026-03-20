@@ -1,0 +1,16 @@
+{
+  "name": "Goldford-3D-Room-Controller-v01",
+  "version": "1.0.0",
+  "description": "3D Room Mode Calculator, Resonance Export, and SPAT Visualizer",
+  "main": "lg.scene.render.v04.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "osc": "^2.4.5",
+    "ws": "^8.18.3"
+  }
+}

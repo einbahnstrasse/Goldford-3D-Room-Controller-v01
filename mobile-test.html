@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Controller Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-4">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6">📱 Mobile Controller Test</h1>
+        
+        <div class="bg-gray-800 p-4 rounded-lg mb-4">
+            <p class="text-green-400">✅ Network connection working!</p>
+            <p class="text-sm text-gray-400 mt-2">IP: 192.168.1.192</p>
+        </div>
+        
+        <button onclick="testGyroscope()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg mb-4">
+            Test Gyroscope
+        </button>
+        
+        <div id="gyroData" class="bg-gray-800 p-4 rounded-lg hidden">
+            <h3 class="font-bold mb-2">Gyroscope Data:</h3>
+            <div id="gyroValues"></div>
+        </div>
+    </div>
+
+    <script>
+        function testGyroscope() {
+            if (window.DeviceOrientationEvent) {
+                // iOS 13+ requires permission
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(response => {
+                            if (response == 'granted') {
+                                startGyroscope();
+                            } else {
+                                alert('Permission denied for gyroscope');
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    // Non-iOS or older iOS
+                    startGyroscope();
+                }
+            } else {
+                alert('Gyroscope not supported on this device');
+            }
+        }
+        
+        function startGyroscope() {
+            document.getElementById('gyroData').classList.remove('hidden');
+            window.addEventListener('deviceorientation', function(event) {
+                document.getElementById('gyroValues').innerHTML = 
+                    `Alpha: ${event.alpha?.toFixed(1) || 'null'}°<br>
+                     Beta: ${event.beta?.toFixed(1) || 'null'}°<br>
+                     Gamma: ${event.gamma?.toFixed(1) || 'null'}°<br>
+                     <small class="text-gray-500">Move your phone to see changes</small>`;
+            });
+        }
+    </script>
+</body>
+</html>
