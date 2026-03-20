@@ -6,6 +6,35 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Max/MSP-orange)
 
+# 3D Room Mode Calculator & Spatial Audio Interface
+
+## Overview
+A web-based toolset for modeling, analyzing, and interacting with spatial audio environments. It includes a 3D room mode calculator, resonance exporter, audio source controller, and SPAT visualizer (SPAT is an audio spatialization engine from IRCAM-Centre pompidou), deployed as a progressive web application.
+
+## Live Demo
+https://lg-3d-room-v01.vercel.app/
+
+## What it does
+- Calculates room modes and resonance behavior in a navigable 3D acoustic space  
+- Exports resonance data for use in audio and synthesis workflows  
+- Provides an interface for controlling and positioning virtual audio sources  
+- Visualizes spatial audio configurations using SPAT-based models  
+- Supports interactive exploration of audio source parameters, which can be demonstrated on a local copy of a MaxMSP patch and rendered as an binaural audio file  
+
+## Technologies
+- JavaScript / Web-based front-end (PWA architecture)  
+- Vercel (deployment)  
+- Three.js    
+- Node.js    
+- MaxMSP    
+- SPAT (a Max library)   
+
+## Context
+Developed as part of ongoing work in audio systems design, spatialization, and interactive front-end tools for music technology. This project reflects a focus on user interface design for intricate audio environments and real-time user interaction.
+
+## Notes
+This project is currently in beta and under active development. It serves as a prototype for testing and refining workflows in spatial audio modeling and control.
+
 ## [Contents](#contents)  
 
 1. [Overview](#overview)  
